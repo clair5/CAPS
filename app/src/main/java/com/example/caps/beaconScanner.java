@@ -52,7 +52,7 @@ public class beaconScanner extends AppCompatActivity {
     BluetoothLeScanner btScanner;
     Button startScanningButton;
     Button stopScanningButton;
-    TextView peripheralTextView;
+    TextView textView;
     private final static int REQUEST_ENABLE_BT = 1;
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
     private BluetoothSPP bt;
@@ -62,22 +62,21 @@ public class beaconScanner extends AppCompatActivity {
         setContentView(R.layout.layout_2);
         Button bibi  = findViewById(R.id.bibi);
         bibi.setOnClickListener(new View.OnClickListener() {
-
             public void onClick(View view) {
                 Intent intent = new Intent(beaconScanner.this,MainActivity.class);
                 startActivity(intent);
+
                 finish();
             }
         });
 
         //peripheralTextView = (TextView) findViewById(R.id.PeripheralTextView);
-        TextView textView = (TextView)findViewById(R.id.textView1);
-       // peripheralTextView.setMovementMethod(new ScrollingMovementMethod());
+        textView = (TextView)findViewById(R.id.textView1);
+        // peripheralTextView.setMovementMethod(new ScrollingMovementMethod());
 
         startScanningButton = (Button) findViewById(R.id.StartScanButton);
         startScanningButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 startScanning();
             }
         });
@@ -123,13 +122,54 @@ public class beaconScanner extends AppCompatActivity {
         @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
-            TextView textView = (TextView)findViewById(R.id.textView1);
-            FirebaseFirestore database = FirebaseFirestore.getInstance();
-            if(result.getDevice().getName()!=null && result.getDevice().getName().equals("Plutocon111"))
+            TextView textView = (TextView) findViewById(R.id.textView1);
+            //FirebaseFirestore database = FirebaseFirestore.getInstance();
+            //System.out.println("devicename "+result.getDevice().getName()+result);
+            System.out.println("device " + result.getDevice().getName());
+            System.out.println("deviceresult123 " + result.getDevice().toString());
+            if (result.getDevice().toString().equals("EB:FD:53:17:5C:D3")) {
+                //textView.setText("rssi 1 (1) " + result.getRssi());
+                if(result.getRssi() > -60)
+                {
+                    textView.setText("rssi 1 (1) " + result.getRssi());
+                    System.out.println("check");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(beaconScanner.this);
+
+                    alert.setTitle("앱을 종료하시겠습니까?");
+                    alert.setIcon(R.drawable.apple);
+                    alert.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            // 액티비티 종료
+                            finish();
+                        }
+                    });
+
+                    alert.setNegativeButton("no", null);
+
+                    // 이 alert dialog 의 버튼을
+                    // 안누르면 화면이 넘어가지 않도록 하는 방법
+                    alert.setCancelable(false);
+                    // alert dialog 를 화면에 표시
+                    alert.show();
+
+                }
+            }
+
+//            if (result.getDevice().getName() != null && result.getDevice().getName().equals("PSM_SHT20")) {
+//                textView.setText("rssi 1 " + result.getRssi());
+//
+//            }
+        }
+
+        ;
+        //textView.setText("rssi 1 "+result.getRssi());
+            /*if(result.getDevice().getName()!=null && result.getDevice().getName().equals("Plutocon111"))
             {
+                textView.setText("rssi 1 "+result.getRssi());
                 HashMap<String,Object> student = new HashMap<>();
                 student.put("1p",result.getRssi());
-
+                textView.setText("rssi 1 "+result.getRssi());
                 database.collection("beacon").document("beacon").update(student)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
@@ -137,8 +177,8 @@ public class beaconScanner extends AppCompatActivity {
 
                             }
                         });
-                        //peripheralTextView.append("Device: " + result.getDevice().getName() + " rssi: " + result.getRssi() + "\n" );
-                        textView.setText("rssi 1 " + result.getRssi());
+                //peripheralTextView.append("Device: " + result.getDevice().getName() + " rssi: " + result.getRssi() + "\n" );
+                textView.setText("rssi 1 " + result.getRssi());
 
             }
             if(result.getDevice().getName()!=null && result.getDevice().getName().equals("Plutocon222"))
@@ -203,7 +243,7 @@ public class beaconScanner extends AppCompatActivity {
                     public void run() {
                         TextView textView = (TextView)findViewById(R.id.textView5);
                         textView.setText("rssi 4 " + result.getRssi());
-                       // peripheralTextView.append("Device: " + result.getDevice().getName() + " rssi: " + result.getRssi() + "\n" );
+                        // peripheralTextView.append("Device: " + result.getDevice().getName() + " rssi: " + result.getRssi() + "\n" );
                     }
                 },5000);
             }
@@ -236,10 +276,10 @@ public class beaconScanner extends AppCompatActivity {
                 builder.show();
             }
         }
-    }
+    }*/
+    };
 
     public void startScanning() {
-
         System.out.println("start scanning");
 //        peripheralTextView.setText("");
         startScanningButton.setVisibility(View.INVISIBLE);
@@ -248,15 +288,15 @@ public class beaconScanner extends AppCompatActivity {
             @Override
             public void run() {
                 btScanner.startScan(leScanCallback);
-
             }
         });
 
     }
 
+
     public void stopScanning() {
         //System.out.println("stopping scanning");
-       // peripheralTextView.append("Stopped Scanning");
+        // peripheralTextView.append("Stopped Scanning");
         startScanningButton.setVisibility(View.VISIBLE);
         stopScanningButton.setVisibility(View.INVISIBLE);
         AsyncTask.execute(new Runnable() {
@@ -268,4 +308,4 @@ public class beaconScanner extends AppCompatActivity {
             }
         });
     }
-}
+};

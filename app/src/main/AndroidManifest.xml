@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.caps">
+    package="com.example.caps"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -16,28 +17,23 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="Re:mind"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".drinkActivity"></activity>
-        <activity android:name=".SnakeActivity" />
-        <activity android:name=".NeedActivity" />
-        <activity android:name=".SimplyActivity" />
-        <activity android:name=".lceActivity" />
-        <activity android:name=".RamenActivity" />
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".IntroActivity">
+<!--            android:exported="true">-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".beaconScanner" />
-        <activity android:name=".beaconGps" />
-        <activity android:name=".GPS" />
-        <activity android:name=".val" />
-        <activity android:name=".fish" />
+        <activity android:name=".MainActivity" />
+        <meta-data
+            android:name="android.app.lib_name"
+            android:value="" />
     </application>
 
 </manifest>
